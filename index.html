@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Qoldau AI — Routing Citizen Requests in Kazakhstan</title>
+<meta name="description" content="An interactive research story: can human-supervised AI help Kazakhstan's public institutions classify and route citizen requests faster, without losing accountability? Final project, PLS 519, Nazarbayev University.">
+<meta name="author" content="Nazerke Amanbekova">
+<meta property="og:title" content="Qoldau AI — One Citizen. One Request. How Many Departments?">
+<meta property="og:description" content="A human-supervised AI decision-support proposal for classifying and routing citizen requests in Kazakhstan (eOtinish / iKOMEK109).">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1c2d5c">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header id="nav">
+  <div class="wrap">
+    <a class="brand" href="#/0" aria-label="Qoldau AI — top">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="17" fill="none" stroke="#c7e1d5" stroke-width="5"/><path d="M41 41l10 10" stroke="#d9b24a" stroke-width="6" stroke-linecap="round"/><circle cx="32" cy="32" r="4" fill="#ff7a4d"/></svg>
+      <span>Qoldau AI</span>
+    </a>
+    <nav class="navlinks" aria-label="Pages">
+      <a href="#/0"><i>00</i>Try it</a>
+      <a href="#/1"><i>01</i>Problem</a>
+      <a href="#/2"><i>02</i>Follow a request</a>
+      <a href="#/3"><i>03</i>Evidence</a>
+      <a href="#/4"><i>04</i>Solution &amp; risks</a>
+      <a href="#/5"><i>05</i>Cost</a>
+      <a href="#/6"><i>06</i>Verdict &amp; sources</a>
+    </nav>
+  </div>
+  <div id="progress" aria-hidden="true"></div>
+</header>
+
+<main id="main">
+<!-- ============ 00 TRY IT ============ -->
+<section data-page="0" id="try" class="dark">
+  <div class="wrap">
+    <div class="sec-head">
+      <h1 style="font-size:clamp(34px,5vw,60px);letter-spacing:-.02em;color:var(--fg);max-width:16em">Send a request to the government. <em style="font-style:italic;color:var(--warn);font-weight:500">See where it goes.</em></h1>
+    </div>
+
+    <div class="panel tryp" id="tryBox">
+      <p class="mono tryl">1 · Pick a problem</p>
+      <div class="topics" id="topics" role="radiogroup" aria-label="Choose a problem"></div>
+      <p class="mono tryl" style="margin-top:22px">2 · Send it</p>
+      <p style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:8px 0 0">
+        <button class="btn pri" id="trySend" type="button">Send my request <span aria-hidden="true">→</span></button>
+        <span class="fg2" id="tryHint" style="font-size:14.5px"></span>
+      </p>
+
+      <div id="tryRun" hidden>
+        <hr class="trysep">
+        <div class="sim tryg">
+          <div>
+            <div class="citizen"><div class="mono">Your request</div><blockquote id="tryQ"></blockquote>
+              <div class="mono" style="margin-top:6px">Answer due</div>
+              <p id="tryDue" style="margin:4px 0 0;font-size:15px;color:var(--fg)"></p></div>
+            <div class="stats" id="tryMeter" style="margin:16px 0 0;grid-template-columns:1fr 1fr"></div>
+          </div>
+          <div>
+            <ol class="chain" id="tryChain" aria-live="polite"></ol>
+          </div>
+        </div>
+        <div id="tryVerdict" class="note red" style="margin-top:14px"></div>
+        <p style="display:flex;gap:12px;flex-wrap:wrap;margin:16px 0 0">
+          <button class="btn ghost" id="tryAgain" type="button">Try again ↻</button>
+          <button class="btn ghost" id="tryAI" type="button">Same request, with Qoldau AI (concept)</button>
+        </p>
+        <p class="src" id="tryTally" style="margin-top:12px"></p>
+      </div>
+      <p class="src" style="margin-top:18px">Offices are fictional. Chance of a redirect = the real 2024 share, 25.8% (calculated from <a href="#ref-beisenov" style="color:inherit">Beisenov, 2025</a>); number of transfers is illustrative. Deadlines: <a href="#ref-inform" style="color:inherit">Kozhabek, 2025</a>. 3 working days per transfer is the legal ceiling (Art. 65), not a measured delay.</p>
+    </div>
+
+    <p style="margin-top:34px;display:flex;gap:12px;flex-wrap:wrap">
+      <a class="btn pri" href="#/1">Start the story <span aria-hidden="true">→</span></a>
+      <a class="btn ghost" href="#/6">Jump to the verdict</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============ HERO ============ -->
+<section data-page="1" id="hero" class="dark">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Qoldau AI · A research proposal · Kazakhstan</p>
+      <h1>One citizen. One request. <em>How many</em> government departments?</h1>
+      <div class="rq">
+        <div class="mono">Research question</div>
+        <p>What are the results of using AI-assisted classification and routing for the administrative treatment of citizens’ requests in Kazakhstan, and which institutional, linguistic, and ethical barriers can hinder this process?</p>
+      </div>
+      <p class="fg2" style="font-size:16px;max-width:34em"><b>Qoldau AI</b> <span class="tag prop">proposed</span> suggests the right office; a public servant decides.</p>
+      <p style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn pri" href="#problem">Next <span aria-hidden="true">↓</span></a>
+        <a class="btn ghost" href="#verdict">Jump to the verdict</a>
+      </p>
+    </div>
+    <div class="hero-viz" aria-label="Animated illustration: a request is passed between several departments">
+      <div class="hero-count" id="heroCount">transfers: 0</div>
+      <svg id="heroSvg" viewBox="0 0 600 440" role="img" aria-label="A citizen request bouncing between four illustrative departments"></svg>
+      <div class="hero-cap">ILLUSTRATIVE ANIMATION · NOT DATA</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 PROBLEM ============ -->
+<section data-page="1" id="problem" class="light">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="eyebrow">The problem</p>
+      <h2 class="wide">When a request has to find its owner</h2>
+            <p class="plain"><b>In plain words:</b> When you send a complaint to the government, it is sometimes passed from office to office before the right one deals with it. This happens more and more.</p>
+    </div>
+
+    <div class="stats rv">
+      <div class="stat"><b data-count="5" data-suffix="M+">5M+</b><span>applications received by eOtinish in 2025</span><small>Over 4M from individuals, ~1M from businesses · <cite>(<a href="#ref-maidd">Ministry, 2026</a>)</cite></small></div>
+      <div class="stat"><b data-count="16.2" data-dec="1" data-suffix="M+">16.2M+</b><span>appeals processed since launch</span><small><cite>(<a href="#ref-maidd">Ministry, 2026</a>)</cite></small></div>
+      <div class="stat"><b data-count="26000" data-suffix="+">26,000+</b><span>organisations connected</span><small><cite>(<a href="#ref-maidd">Ministry, 2026</a>)</cite></small></div>
+      <div class="stat"><b data-count="380000" data-suffix="+">380,000+</b><span>employees involved in processing appeals</span><small><cite>(<a href="#ref-maidd">Ministry, 2026</a>)</cite></small></div>
+    </div>
+
+    <div class="two">
+      <div class="panel rv">
+        <h3 style="margin-bottom:6px">Redirected requests keep rising</h3>
+        
+        <div class="seg" role="group" aria-label="Choose data source" id="segRedir">
+          <button aria-pressed="true" data-v="gov">Openness Index 2024 → 2025</button>
+          <button aria-pressed="false" data-v="beis">Beisenov 2021 → 2025</button>
+          <button aria-pressed="false" data-v="share">Share of all requests</button>
+        </div>
+        <div class="chart" id="chartRedir"></div>
+        <div class="src" id="srcRedir"></div>
+      </div>
+      <div class="rv">
+        <p class="takeaway">Redirected requests rose <em>54.5%</em> in a year, from about 1.1 million to over 1.7 million.</p>
+        <p style="margin-top:18px">In 2025: <b>173,626</b> redirects in Almaty’s akimat, <b>70,192</b> in Astana’s <cite>(<a href="#ref-govindex">Gov. of Kazakhstan, 2026, p. 12</a>)</cite>.</p>
+        <div class="note"><b>Careful:</b> a redirect is not always an error. The data cannot separate legitimate transfers from avoidable ones.</div>
+      </div>
+    </div>
+
+    <div class="sec-head rv" style="margin:72px 0 0">
+      <h3 style="font-size:clamp(24px,3vw,34px)">Not every redirect is a failure</h3>
+    </div>
+    <div class="cls">
+      <div class="card rv" style="--c:var(--cyan-d)"><span class="tag fact">legitimate</span><h3 style="margin-top:12px">Another body has the authority</h3><p>Art. 65 allows up to <b>3 working days</b> to transfer an appeal to the competent body.</p></div>
+      <div class="card rv" style="--c:var(--warn-d)"><span class="tag rsk">possibly avoidable</span><h3 style="margin-top:12px">Wrong first destination</h3><p>More steps, slower answers, more staff load. How often it happens is not public.</p></div>
+      <div class="card rv" style="--c:var(--gold)"><span class="tag est">measured, but narrow</span><h3 style="margin-top:12px">Redirected too late</h3><p>Over <b>20,000</b> of 2.7 million requests in H1 2025 <cite>(<a href="#ref-govindex">Gov. of Kazakhstan, 2026</a>)</cite>.</p></div>
+    </div>
+
+    <div class="three" style="margin-top:56px">
+      <div class="card rv"><h3>Citizens</h3><p>Transfers slow down urgent housing, social and safety issues.</p></div>
+      <div class="card rv"><h3>Public servants</h3><p>Sorting cases takes effort that could go to solving them.</p></div>
+      <div class="card rv"><h3>Accountability</h3><p>What matters is not how many requests arrive, but whether they reach the right office and get answered.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 FOLLOW ============ -->
+<section data-page="2" id="follow" class="dark alt">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="eyebrow">Follow the request</p>
+      <h2 class="wide">What a bounce costs</h2>
+            <p class="plain"><b>In plain words:</b> Every time a request is passed on, it loses time. The law allows up to 3 working days for each pass.</p>
+    </div>
+    <div class="note cy rv"><b>Fictional demonstration.</b> No accuracy or time savings are claimed.</div>
+
+    <div class="sim rv">
+      <div class="citizen">
+        <div class="mono">Citizen request · fictional</div>
+        <blockquote>“Heating in our apartment block has been off for two weeks and the management company is not answering.”</blockquote>
+        <div class="seg" role="tablist" aria-label="Scenario" id="segSim" style="margin-bottom:14px">
+          <button role="tab" aria-selected="true" data-m="today">Unclear classification</button>
+          <button role="tab" aria-selected="false" data-m="ai">With Qoldau AI</button>
+        </div>
+        <div id="simTodayCtl">
+          <label class="sl" for="xfers">Number of transfers: <b id="xfersVal">2</b></label>
+          <input type="range" id="xfers" min="0" max="4" value="2">
+        </div>
+        <p style="margin:16px 0 0"><button class="btn pri" id="simPlay" type="button">▶ Submit request</button></p>
+      </div>
+      <div>
+        <div class="meter" id="simMeter">
+          <div><b id="mT">2</b><span>transfers</span></div>
+          <div><b id="mD">≤ 6</b><span>working days allowed for transfers alone (3 per transfer, Art. 65)</span></div>
+          <div><b id="mC">3</b><span>institutions that handle the file</span></div>
+        </div>
+        <ol class="chain" id="simChain" aria-live="polite"></ol>
+        <p class="src" id="simNote"></p>
+      </div>
+    </div>
+
+    <div class="panel rv" style="margin-top:40px">
+      <h3 style="margin-bottom:6px">Urgent requests have short deadlines</h3>
+      <p class="fg2" style="font-size:15px">Answer deadlines (Astana “109”): <b>24 h · 72 h · 7 days · 10 days</b> by urgency <cite>(<a href="#ref-inform">Kozhabek, 2025</a>)</cite>. Compare with up to 3 working days <u>per transfer</u> (Art. 65).</p>
+      <div id="tierBox" class="tiers"></div>
+      <div class="note"><b>A question, not a finding.</b> Sources do not say whether the clock restarts on transfer. Deadlines quoted from Kozhabek (2025); please verify.</div>
+    </div>
+
+    <div class="three" style="margin-top:56px">
+      <div class="card rv"><h3 style="color:var(--warn)">Repeated transfers</h3><p>Each handover starts a new review and a new notification to the applicant.</p></div>
+      <div class="card rv"><h3 style="color:var(--warn)">More administrative work</h3><p>Staff re-read, re-classify and re-forward instead of assessing the substance.</p></div>
+      <div class="card rv"><h3 style="color:var(--warn)">Uncertainty for citizens</h3><p>The applicant cannot tell who now owns the problem — or how long it will take.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 EVIDENCE ============ -->
+<section data-page="3" id="evidence" class="light">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="eyebrow">The evidence</p>
+      <h2 class="wide">What do we actually know?</h2>
+            <p class="plain"><b>In plain words:</b> Requests are growing, most people are online, and similar systems abroad report good results. But nobody has yet shown how well this would work in Kazakhstan.</p>
+    </div>
+    <div class="seg rv" role="tablist" id="evTabs" aria-label="Evidence">
+      <button role="tab" aria-selected="true" data-t="A">A · Growth of requests</button>
+      <button role="tab" aria-selected="false" data-t="B">B · Digital access</button>
+      <button role="tab" aria-selected="false" data-t="C">C · International cases</button>
+      <button role="tab" aria-selected="false" data-t="D">D · Technical evidence</button>
+    </div>
+
+    <div class="evp" id="evA">
+      <div class="two">
+        <div class="panel">
+          <div class="legend"><span><i style="background:#13304f"></i>All requests</span><span><i style="background:var(--warn-d)"></i>Redirected</span></div>
+          <div class="chart" id="chartGrowth"></div>
+          <div class="src"><b>Source:</b> Beisenov (2025), pp. 39–40 (requests) and p. 67 (redirected requests), based on administrative statistics. 2025 covers the <b>first ten months only</b>. The source paper does not report 2022–2023. Red labels = redirected share of all requests; *2024 share calculated here from the same figures.</div>
+        </div>
+        <div>
+          <p class="takeaway">Redirected requests grew faster than total requests: from <em>18.1%</em> to <em>29.1%</em> of the total.</p>
+          
+          <div class="note"><b>Shows:</b> routing workload grows with demand. <b>Cannot show:</b> whether redirects were correct or avoidable.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="evp" id="evB" hidden>
+      <div class="two">
+        <div class="panel">
+          <div class="legend"><span><i style="background:#13304f"></i>Urban households</span><span><i style="background:var(--cyan-d)"></i>Rural households</span></div>
+          <div class="chart" id="chartAccess"></div>
+          <div class="src"><b>Source:</b> Bureau of National Statistics &amp; UNICEF (2025), Kazakhstan MICS 2024, Table LN.6.1. Household-level data. Gap values are calculated from the table.</div>
+        </div>
+        <div>
+          <p class="takeaway">Internet access is similar everywhere; <em>devices</em> are not.</p>
+          <p style="margin-top:16px">94.9% of households have home internet, only 53.8% a computer. Urban–rural gap: 13.1 points for computers, about 1 for internet.</p>
+          <div class="note red"><b>Do not over-read this.</b> These indicators are context; they do not show exclusion from eOtinish.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="evp" id="evC" hidden>
+      <div class="two">
+        <div class="card" style="padding:26px">
+          <span class="tag est">project-reported</span>
+          <h3 style="margin:12px 0 6px">Bağcılar Municipality, Istanbul</h3>
+          <p>AI reads free-text applications, classifies them and routes them to the right department.</p>
+          <table style="width:100%;border-collapse:collapse;font-size:14.5px;margin-top:14px">
+            <tr><td>Routing accuracy</td><td style="text-align:right"><b>&gt; 95%</b> <small>(World Bank)</small></td></tr>
+            <tr><td>Processing time</td><td style="text-align:right"><b>minutes/hours → seconds</b> <small>(World Bank)</small></td></tr>
+            <tr><td>Automated processing without human intervention</td><td style="text-align:right"><b>99.99%</b> <small>(Olivieri)</small></td></tr>
+            <tr><td>Working days saved</td><td style="text-align:right"><b>1,452</b> <small>(Olivieri)</small></td></tr>
+            <tr><td>Estimated savings</td><td style="text-align:right"><b>1.78M TRY</b> <small>(Olivieri)</small></td></tr>
+                      </table>
+          <p class="src"><b>Sources:</b> <a href="#ref-wbg">World Bank Group (n.d.)</a>; <a href="#ref-olivieri">Olivieri (2026)</a>.</p>
+        </div>
+        <div class="card" style="padding:26px">
+          <span class="tag est">agency-reported</span>
+          <h3 style="margin:12px 0 6px">Singapore — OneService Chatbot</h3>
+          <p>A chatbot on WhatsApp and Telegram predicts the category and routes the report.</p>
+          <table style="width:100%;border-collapse:collapse;font-size:14.5px;margin-top:14px">
+            <tr><td>Cases handled</td><td style="text-align:right"><b>&gt; 30,000 / month</b></td></tr>
+            <tr><td>Staff hours saved</td><td style="text-align:right"><b>≈ 2,000</b></td></tr>
+            <tr><td>Resolution time</td><td style="text-align:right"><b>up to 2 working days faster</b></td></tr>
+            <tr><td>Headcount</td><td style="text-align:right"><b>not increased</b></td></tr>
+          </table>
+          <p class="src"><b>Source:</b> <a href="#ref-govtech">GovTech Singapore (2024)</a>.</p>
+        </div>
+      </div>
+      <div class="note red" style="margin-top:24px"><b>Cannot be copied directly:</b> results are self-reported, and automated processing is not the same as accuracy. Kazakhstan needs local training and independent evaluation.</div>
+    </div>
+
+    <div class="evp" id="evD" hidden>
+      <div class="two">
+        <div class="panel">
+          <div class="chart" id="chartF1"></div>
+          <div class="src"><b>Source:</b> Rakhimzhanov, Belginova &amp; Yedilkhan (2025), <i>Information</i> 16(8), 644, using municipal complaints. Best text-only baseline vs. a hybrid model that adds linked entity information.</div>
+        </div>
+        <div>
+          <p class="takeaway">A richer model scored higher — but the authors caution that complexity is not automatically better.</p>
+          <div class="card" style="margin:18px 0"><p>A mark from 0 to 1 for sorting complaints correctly (technical name: “Macro F1”). Text alone: <b>0.722</b>. With extra city information: <b>0.781</b>.</p></div>
+          <div class="note"><b>Limits:</b> no statistically significant advantage in the retrieval evaluation. <b>Not evidence that Qoldau AI will reach these scores.</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 SOLUTION ============ -->
+<section data-page="4" id="solution" class="dark">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="eyebrow">The proposed solution <span class="tag prop" style="margin-left:8px">proposed</span></p>
+      <h2 class="wide">Meet Qoldau AI</h2>
+            <p class="plain"><b>In plain words:</b> Qoldau AI reads a request and suggests which office should get it. A person always checks and decides.</p>
+    </div>
+
+    <div class="principle rv"><p><span class="a">AI recommends.</span> <span class="h">Humans decide.</span></p></div>
+
+    <div class="rv">
+      <h3 style="margin-bottom:14px">Interactive mockup: the operator’s view</h3>
+      <div class="dash" id="dash">
+        <div class="dash-bar"><i></i><i></i><i></i>&nbsp; Qoldau AI · operator review <span class="demo-flag">Demonstration · fictional data</span></div>
+        <div class="dash-body">
+          <div>
+            <label for="sample" class="sl">Choose a fictional request</label>
+            <select id="sample"></select>
+            <div class="req" id="reqText" lang="ru"></div>
+            <div class="logbox" id="dlog">Operator action log: <b>—</b> no action yet.</div>
+          </div>
+          <div>
+            <div class="row"><span>Detected language</span><b id="dLang">—</b></div>
+            <div class="row"><span>Main topic</span><b id="dTopic">—</b></div>
+            <div class="row"><span>Recommended department</span><b id="dDept">—</b></div>
+            <div style="padding:11px 0"><div style="display:flex;justify-content:space-between;font-size:14.5px;color:var(--fg2)"><span>Confidence <small style="opacity:.7">(illustrative)</small></span><b id="dConf" style="color:var(--fg)">—</b></div><div class="conf"><i id="dBar"></i></div></div>
+            <div class="flag" id="dFlag"></div>
+            <div class="ops">
+              <button class="btn ok" id="bOk" type="button">✓ Confirm routing</button>
+              <select id="bSel" aria-label="Correct the department"></select>
+              <button class="btn fix" id="bFix" type="button">✎ Correct &amp; log reason</button>
+            </div>
+            <p class="src" style="color:var(--fg2)">Percentages and labels are invented for the demo. They are <b>not</b> output from a trained model. Department names are generic placeholders.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin:56px 0 14px" class="rv">How it works <span class="fg2" style="font-weight:400;font-size:16px">— click a step</span></h3>
+    <div class="arch rv" id="arch"></div>
+    <div class="arch-detail rv" id="archDetail" aria-live="polite"></div>
+
+    <div class="three" style="margin-top:44px">
+      <div class="card rv"><h3>Rules + learning</h3><p>Machine learning plus an up-to-date database of who is responsible for what.</p></div>
+      <div class="card rv"><h3>Automatic flags</h3><p>Low confidence, unclear responsibility or urgency: a human takes a second look.</p></div>
+      <div class="card rv"><h3>What it will not do</h3><p>It would not reject appeals, decide eligibility or make final decisions.</p></div>
+    </div>
+    <div class="card rv" style="margin-top:34px;border-style:dashed">
+      <span class="tag prop">possible extension — not in the paper</span>
+      <h3 style="margin-top:12px">Grouping similar requests</h3>
+      <p>Link many reports of the same problem (e.g. one building without heating) into one case. An operator would confirm every merge; each citizen still gets a reply. Untested.</p>
+    </div>
+    <div class="two" style="margin-top:34px">
+      <div class="card rv"><h3>Nationally coordinated, locally operated</h3><p>A national body sets standards and monitors performance; local akimats integrate it and supervise operators.</p></div>
+      <div class="card rv"><h3>Why iKOMEK109?</h3><p>A <b>controlled pilot inside an existing system</b>, not a new channel. iKOMEK109 already handles over 2.2 million appeals a year <cite>(<a href="#ref-maidd">Ministry, 2026</a>; <a href="#ref-astana">Astana City Akimat, 2025</a>)</cite>.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 RISKS ============ -->
+<section data-page="4" id="risks" class="light">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="eyebrow">The risks</p>
+      <h2 class="wide">What could go wrong?</h2>
+            <p class="lede" style="font-size:17px">Click a card. These are risks to investigate, not proven findings.</p>
+      <p class="plain"><b>In plain words:</b> The AI can make mistakes, may work worse in one language, and people may trust it too much. So safeguards are needed.</p>
+    </div>
+    <div class="risks rv" id="riskGrid"></div>
+
+    <div class="safeguards">
+      <div class="two">
+        <div class="rv">
+          <h2 style="font-size:clamp(28px,4vw,44px);max-width:16ch">Why human review must be more than a rubber stamp</h2>
+          <p style="margin-top:18px">People tend to trust AI advice that confirms what they already think <cite>(<a href="#ref-selten">Selten et al., 2023</a>)</cite>. Oversight can become symbolic.</p>
+        </div>
+        <div class="rv">
+          <div class="card">
+            <h3>Design safeguards proposed in the paper</h3>
+            
+            <div class="sg" style="grid-template-columns:1fr" id="sgBox">
+              <label><input type="checkbox"> Display confidence levels</label>
+              <label><input type="checkbox"> Keep the option to override</label>
+              <label><input type="checkbox"> Record reasons for corrections</label>
+              <label><input type="checkbox"> Regular independent audits</label>
+              <label><input type="checkbox"> Tell citizens AI assists; keep ordinary appeal routes</label>
+            </div>
+            <div class="oversight"><i id="ovBar"></i></div>
+            <p class="src" id="ovTxt">0 of 5 safeguards active — oversight would risk being symbolic.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 COST ============ -->
+<section data-page="5" id="cost" class="dark alt">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="eyebrow">The cost of the pilot</p>
+      <h2 class="wide">Nine months in Astana: about KZT 81 million</h2>
+            <p class="plain"><b>In plain words:</b> A nine-month trial in Astana would cost about KZT 81 million. Whether it saves money is not known yet; you can test it below.</p>
+    </div>
+    <div class="note rv"><span class="tag est">planning assumption</span> &nbsp;These figures are informed by public salary and hosting benchmarks (<cite><a href="#ref-antal">Antal Kazakhstan, 2026</a>; <a href="#ref-netcell">Net Cell, 2026</a></cite>). They are <b>not</b> supplier quotations, procurement prices or an approved government budget.</div>
+
+    <div class="rv" style="margin-top:28px">
+      <div class="stack" id="stack" role="group" aria-label="Budget breakdown"></div>
+      <div id="budgetRows"></div>
+      <div class="total"><span class="fg2">Total estimated pilot budget</span><b>KZT 80.85 million</b></div>
+      <p class="src">Source: Table 3. Components sum to 80.83M because the source rounds the subtotal; total as stated in the paper.</p>
+    </div>
+
+    <div style="max-width:640px;margin-top:56px">
+      <div class="rv">
+        <h3 style="margin-bottom:10px">After the pilot: annual maintenance</h3>
+        <div class="stat" style="margin-bottom:16px"><b>≈ KZT 33.4M</b><span>per year, <u>for the Astana deployment only</u></span></div>
+        <div class="calc">Technical staff &amp; support&nbsp;&nbsp;18.9<br>Hosting &amp; infrastructure&nbsp;&nbsp;&nbsp;&nbsp;1.5<br>Security audits &amp; updates&nbsp;&nbsp;&nbsp;3.0<br>Data &amp; model updates&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.0<br>Training &amp; documentation&nbsp;&nbsp;&nbsp;1.0<br><em>Subtotal 26.4 × 1.10 × 1.15 ≈ 33.4</em></div>
+        <p class="src">Source: Table 4 (million KZT). Not a national-system cost.</p>
+      </div>
+    </div>
+    <div class="panel rv" style="margin-top:44px">
+      <h3 style="margin-bottom:6px">A sense of scale</h3>
+      <p class="fg2" style="font-size:15px">In 2022 West Kazakhstan Region tendered its “109” help service for <b>KZT 240 million over three years</b> <cite>(<a href="#ref-kaztag">KazTAG, 2022</a>)</cite>.</p>
+      <div class="sc" role="img" aria-label="Bar comparison: ZKO help-service contract 240 million tenge over three years versus Qoldau AI pilot 80.85 million and 33.4 million a year">
+        <div class="scr"><span>ZKO help-service contract <small>(2022, 3 years, <b>KZT 240M</b>)</small></span><div class="bar"><i style="width:100%;background:var(--warn)"></i></div></div>
+        <div class="scr"><span>ZKO contract <small>per year (≈ <b>KZT 80M</b>, calculated)</small></span><div class="bar"><i style="width:33.3%;background:#ffa98a"></i></div></div>
+        <div class="scr"><span>Qoldau AI pilot <small>(9 months, one-off, <b>KZT 80.85M</b>, proposed)</small></span><div class="bar"><i style="width:33.7%;background:var(--cyan)"></i></div></div>
+        <div class="scr"><span>Qoldau AI maintenance <small>(per year, <b>KZT 33.4M</b>, proposed)</small></span><div class="bar"><i style="width:13.9%;background:#8ff0e8"></i></div></div>
+      </div>
+      <p style="margin-top:16px">The pilot would cost about <b>a third</b> of that contract (80.85 / 240 ≈ 34%); yearly upkeep about <b>42%</b> of its yearly value. <span class="fg2">(Calculated here.)</span></p>
+      <div class="note"><b>Order of magnitude only.</b> Different scope, region, year and term. It shows the pilot is small, <u>not</u> that Qoldau AI saves money.</div>
+    </div>
+    <div class="panel rv" style="margin-top:44px" id="beCalc">
+      <p class="eyebrow" style="margin-bottom:8px">Try it yourself · not a forecast</p>
+      <h3 style="margin-bottom:6px">Would Qoldau AI pay for itself?</h3>
+      <p class="fg2" style="font-size:16px;max-width:60em">Nobody knows yet how much time it would save. The pilot would measure sliders 1–3.</p>
+      <div class="two" style="gap:28px;margin-top:20px">
+        <div>
+          <label class="sl" for="beStop"><b>1.</b> Each year about 70,192 requests are passed on to another office in Astana’s akimat (2025). Out of every 100, how many would Qoldau AI stop from being passed on needlessly? <b id="beStopV"></b> out of 100</label>
+          <input type="range" id="beStop" min="0" max="50" step="1" value="20" style="accent-color:var(--cyan)">
+          <label class="sl" for="beMin" style="margin-top:14px"><b>2.</b> Staff time wasted by one needless pass: <b id="beMinV"></b> minutes</label>
+          <input type="range" id="beMin" min="1" max="90" step="1" value="10" style="accent-color:var(--cyan)">
+          <label class="sl" for="beSec" style="margin-top:14px"><b>3.</b> Seconds saved each time staff choose a category for a new request: <b id="beSecV"></b> seconds <small class="fg2">(small, but there are over 2.2 million requests a year)</small></label>
+          <input type="range" id="beSec" min="0" max="60" step="1" value="30" style="accent-color:var(--cyan)">
+        </div>
+        <div>
+          <label class="sl" for="beRate"><b>4.</b> What one hour of staff time costs: <b id="beRateV"></b> tenge <small class="fg2">(<a href="#ref-kursiv" style="color:inherit">Kursiv, 2026</a>, Bureau of National Statistics survey)</small></label>
+          <div class="seg" id="ratePre" style="margin:4px 0 6px"><button type="button" aria-pressed="true" data-r="2500">Nationwide 2,500</button><button type="button" aria-pressed="false" data-r="3300">Astana 3,300</button><button type="button" aria-pressed="false" data-r="4400">Civil servants 4,400</button></div>
+          <input type="range" id="beRate" min="500" max="8000" step="100" value="2500" style="accent-color:var(--cyan)">
+          <label class="sl" for="beH" style="margin-top:14px"><b>5.</b> Look ahead: <b id="beHV"></b> years</label>
+          <input type="range" id="beH" min="1" max="10" step="1" value="5" style="accent-color:var(--cyan)">
+          <p class="src" style="margin-top:14px">Costs are from the paper. Sliders 1–3 are guesses, not data.</p>
+        </div>
+      </div>
+      <div class="stats" style="margin:26px 0 8px" id="beOut"></div>
+      <div class="chart" id="chartNet"></div>
+      <p class="src" id="beSrc"></p>
+      <details class="rv" style="margin-top:14px" open>
+        <summary style="cursor:pointer;font-weight:600">How this is calculated</summary>
+        <div class="calc" style="margin-top:10px;font-size:13.5px">
+          <b>1. Hours freed per year</b> = (70,192 × <em>needless passes stopped %</em> × <em>minutes</em> ÷ 60) + (2,200,000 × <em>seconds</em> ÷ 3,600)<br>
+          <b>2. Value per year</b> = hours freed × <em>cost of one hour</em><br>
+          <b>3. Net gain per year</b> = value per year − 33.4 million (yearly cost)<br>
+          <b>4. Payback time</b> = 80.85 million (trial cost) ÷ net gain per year <span class="fg2">(only if the net gain is above zero)</span><br>
+          <b>5. Total after N years</b> = −80.85 million + N × net gain per year (the line on the chart)<br>
+          <b>6. “Workers’ time”</b> = hours freed ÷ 1,920 <span class="fg2">(1,920 = 160 working hours a month × 12; my assumption)</span>
+        </div>
+        <div class="calc" id="beWork" style="margin-top:10px;font-size:13.5px"></div>
+        
+      </details>
+      <div class="note"><b>Freed time is not cash or jobs to cut.</b> The paper says Qoldau AI must not be used to cut staff.</div>
+    </div>
+    <div class="three" style="margin-top:44px">
+      <div class="card rv"><h3>Work changes, it doesn’t vanish</h3><p>Less categorising, more complex cases; new work for data and security staff.</p></div>
+      <div class="card rv"><h3>Hidden labour: annotation</h3><p>Past requests must be labelled by bilingual experts. It is budgeted, not free.</p></div>
+      <div class="card rv"><h3>Continuous monitoring</h3><p>Responsibilities change, so the model needs ongoing checks.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 VERDICT ============ -->
+<section data-page="6" id="verdict" class="dark">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="eyebrow">The verdict</p>
+      <h2 class="wide">Should Kazakhstan adopt Qoldau AI?</h2>
+      <p class="plain"><b>In plain words:</b> Try a small trial that is checked by outsiders. Expand only if it clearly works better than today.</p>
+    </div>
+    <p class="takeaway rv" style="max-width:30em;color:var(--fg);font-size:clamp(24px,3.2vw,38px)">Not as an autonomous system, and not as a reason to cut staff. <span style="color:var(--cyan)">Yes — to a limited, independently evaluated pilot</span> inside iKOMEK109, under six conditions.</p>
+    <div class="conds rv">
+      <div class="cond"><b>Lawful, anonymised data</b>Legally obtained and anonymised training data.</div>
+      <div class="cond"><b>Two languages, two scores</b>Separate evaluation of Kazakh and Russian performance.</div>
+      <div class="cond"><b>Meaningful human oversight</b>Operators can correct; disagreements are recorded.</div>
+      <div class="cond"><b>Local data, legal compliance</b>Local data storage; government-controlled or legally compliant infrastructure; the AI Law’s risk classification set by the responsible authority.</div>
+      <div class="cond"><b>Transparent procurement</b>Open, documented purchasing of the system and services.</div>
+      <div class="cond"><b>Public reporting</b>Independent monitoring and public reporting of errors, processing times and outcomes.</div>
+    </div>
+    <div class="gate rv">
+      <div class="box yes"><span class="tag fact">if the pilot shows</span><p style="margin:10px 0 0">Measurable improvement over existing operator decisions: fewer unnecessary transfers, less delay, less repetitive work — without new inequalities or weaker accountability.</p></div>
+      <div class="arr" aria-hidden="true">→</div>
+      <div class="box no"><span class="tag rsk">otherwise</span><p style="margin:10px 0 0">Expansion would not be justified. The paper sets this as an explicit stopping condition.</p></div>
+    </div>
+    <p class="src rv" style="max-width:60em">Legal context cited in the paper: Law on Artificial Intelligence (<a href="#ref-ailaw" style="color:inherit">Law No. 230-VIII, 17 Nov 2025</a>, Arts. 17–21: risk-based approach, audits incl. training-data quality, transparency); Law on Personal Data and Their Protection (<a href="#ref-pdl" style="color:inherit">Law No. 94-V, 2013</a>, Art. 12: storage in databases located in Kazakhstan); and the <a href="#ref-minguide" style="color:inherit">Ministry’s 2026 guidelines</a> on government use of AI (anonymisation, verification of outputs, officials responsible for final decisions).</p>
+
+    <div class="finale rv">
+      <svg viewBox="0 0 760 170" role="img" aria-label="Many tangled transfers resolve into a single path through a human review checkpoint to the right department">
+        <g fill="none" stroke-width="2.5" stroke-linecap="round">
+          <path d="M30 85 C 70 20, 110 150, 150 40 S 190 140, 210 85" stroke="#ff7a4d" opacity=".75"/>
+          <path d="M30 85 C 80 150, 100 10, 150 120 S 180 30, 210 85" stroke="#ff7a4d" opacity=".45"/>
+          <path d="M210 85 H 330" stroke="#c7e1d5" stroke-dasharray="3 9" id="fl1"/>
+          <path d="M410 85 H 700" stroke="#c7e1d5" stroke-width="4"/>
+        </g>
+        <circle cx="30" cy="85" r="9" fill="#e8eef6"/>
+        <text x="30" y="125" fill="#a9b8cc" font-size="12" text-anchor="middle" font-family="Inter">citizen</text>
+        <text x="130" y="165" fill="#ff7a4d" font-size="12" text-anchor="middle" font-family="Inter">today: possible bounces</text>
+        <rect x="330" y="55" width="80" height="60" rx="14" fill="#0c1d33" stroke="#c7e1d5" stroke-width="2"/>
+        <text x="370" y="80" fill="#c7e1d5" font-size="11" text-anchor="middle" font-family="JetBrains Mono">AI</text>
+        <text x="370" y="98" fill="#c7e1d5" font-size="11" text-anchor="middle" font-family="JetBrains Mono">suggests</text>
+        <circle cx="500" cy="85" r="26" fill="#d9b24a"/>
+        <text x="500" y="82" fill="#2b1f00" font-size="10" text-anchor="middle" font-family="JetBrains Mono" font-weight="600">HUMAN</text>
+        <text x="500" y="95" fill="#2b1f00" font-size="10" text-anchor="middle" font-family="JetBrains Mono" font-weight="600">DECIDES</text>
+        <circle cx="710" cy="85" r="12" fill="#c7e1d5"/>
+        <text x="710" y="125" fill="#a9b8cc" font-size="12" text-anchor="middle" font-family="Inter">right department</text>
+      </svg>
+      <blockquote>The goal is not to automate government for its own sake. It is to make existing public institutions <em>more responsive and accountable</em> to citizens.</blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 SOURCES ============ -->
+<section data-page="6" id="sources" class="light">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="eyebrow">References &amp; methodology</p>
+      <h2 class="wide">What the evidence can — and cannot — establish</h2>
+      <p class="plain"><b>In plain words:</b> Where the numbers come from, and what we still do not know.</p>
+    </div>
+    <div class="meth rv">
+      <div class="card"><h3>Data the project uses</h3><ul><li>eOtinish / Ministry reporting and the 2025 Openness Index</li><li>Administrative statistics compiled by Beisenov (2025)</li><li>BNS–UNICEF MICS 2024 household survey</li><li>Project reports for Bağcılar and Singapore</li><li>Academic literature on digital government, discretion and text classification</li></ul></div>
+      <div class="card"><h3>What it can establish</h3><ul><li>Requests and redirects are growing, and routing is a large part of the workload</li><li>Automated classification of citizen text is technically feasible, including with Kazakhstan data</li><li>Kazakhstan has substantial digital infrastructure to build on</li><li>Benefits of AI are conditional on institutions, oversight and data</li></ul></div>
+      <div class="card"><h3>What it cannot establish</h3><ul><li>Whether a given redirect was legitimate, avoidable or slow</li><li>Whether systems work equally for Kazakh and Russian submissions</li><li>Whether older, disabled or less digitally literate people face more difficulty</li><li>That Qoldau AI would reach any particular accuracy, or save any time or money</li></ul></div>
+      <div class="card"><h3>Data needed to evaluate Qoldau AI</h3><ul><li>Anonymised request texts with original and final classification</li><li>Department(s) assigned, transfer histories, processing times, final outcomes</li><li>Results reported <b>separately for Kazakh and Russian</b></li><li>Operator corrections and disagreements with AI output</li></ul></div>
+    </div>
+
+    <h3 class="rv" style="margin-bottom:10px">References</h3>
+    <ol class="refs rv" style="list-style:none">
+      <li id="ref-amirova">Amirova, A. (2025). Advancing citizen-centered public services in Kazakhstan: Legal, institutional, and digital governance perspectives. <i>Frontiers in Political Science, 7</i>. <a href="https://doi.org/10.3389/fpos.2025.1679601" target="_blank" rel="noopener">https://doi.org/10.3389/fpos.2025.1679601</a></li>
+      <li id="ref-antal">Antal Kazakhstan. (2026). <i>Исследование рынка труда и обзор заработных плат 2026–2027</i>. Salary Survey. <a href="https://antalkazakhstan.kz/wp-content/uploads/2026/10/RUS_Antal_Kazakhstan_Salary_Survey_2026_2027.pdf" target="_blank" rel="noopener">antalkazakhstan.kz — Salary Survey 2026–2027 (PDF)</a></li>
+      <li id="ref-astana">Astana City Akimat. (2025). <i>A modernized information system, iKOMEK 2.0, is being launched in the capital.</i> <a href="https://www.gov.kz/org/astana/press/news/details/1007387?lang=ru" target="_blank" rel="noopener">https://www.gov.kz/org/astana/press/news/details/1007387?lang=ru</a></li>
+      <li id="ref-beisenov">Beisenov, A. Q. (2025). <i>Ákimshilik rásimderdi júzege asyrýda jasandy intellekt elementterin qoldaný: múmkindikteri men táýekelderi</i> [The use of artificial intelligence elements in the implementation of administrative procedures: Opportunities and risks]. Academy of Public Administration under the President of the Republic of Kazakhstan. <a href="https://repository.apa.kz/xmlui/handle/123456789/1751" target="_blank" rel="noopener">https://repository.apa.kz/xmlui/handle/123456789/1751</a></li>
+      <li id="ref-bns">Bureau of National Statistics of the Republic of Kazakhstan, &amp; UNICEF. (2025). <i>Kazakhstan Multiple Indicator Cluster Survey 2024: Survey findings report.</i> <a href="https://stat.gov.kz/upload/medialibrary/40a/bqc5xe66p4fvfq8i2x8zpip3pg46ptd4/MICS7KAZ%20SFR%2020251103%20EN%20v2.pdf" target="_blank" rel="noopener">stat.gov.kz — MICS7 KAZ SFR (PDF)</a></li>
+      <li id="ref-deboer">de Boer, N., &amp; Raaphorst, N. (2023). Automation and discretion: Explaining the effect of automation on how street-level bureaucrats enforce. <i>Public Management Review, 25</i>(1), 42–62. <a href="https://doi.org/10.1080/14719037.2021.1937684" target="_blank" rel="noopener">https://doi.org/10.1080/14719037.2021.1937684</a></li>
+      <li id="ref-govindex">Government of the Republic of Kazakhstan. (2026). <i>Indeks otkrytosti tsentralnykh gosudarstvennykh i mestnykh ispolnitelnykh organov oblastei, gorodov respublikanskogo znacheniia, stolitsy po itogam 2025 goda</i> [Index of openness of central state and local executive bodies for 2025]. <a href="https://www.gov.kz/uploads/2026/5/4/71c73e698a121b72b9342c5af3f56e3e_original.1025186.pdf" target="_blank" rel="noopener">gov.kz — Index of Openness 2025 (PDF)</a></li>
+      <li id="ref-govtech">Government Technology Agency of Singapore. (2024, January 12). <i>AI applications in government: Use cases and public services.</i> <a href="https://www.tech.gov.sg/technews/how-govtech-uses-ai-to-enhance-digital-public-services/" target="_blank" rel="noopener">https://www.tech.gov.sg/technews/how-govtech-uses-ai-to-enhance-digital-public-services/</a></li>
+      <li id="ref-kaztag">KazTAG. (2022, February 10). <i>В Т240 млн обойдется бюджету ЗКО содержание единой справочной службы IKomek</i> [KZT 240 million: the cost to the West Kazakhstan Region budget of running the IKomek unified help service]. <a href="https://kaztag.kz/ru/news/v-t240-mln-oboydetsya-byudzhetu-zko-soderzhanie-edinoy-spravochnoy-sluzhby-ikomek" target="_blank" rel="noopener">https://kaztag.kz/ru/news/v-t240-mln-oboydetsya-byudzhetu-zko-soderzhanie-edinoy-spravochnoy-sluzhby-ikomek</a> <span class="tag est">reports Uralskaya Nedelya</span></li>
+      <li id="ref-kursiv">Kursiv Media. (2026, November 2). <i>Where an hour of labor costs the most in Kazakhstan.</i> <a href="https://kz.kursiv.media/en/2026-11-02/engk-yeri-where-an-hour-of-labor-costs-the-most-in-kazakhstan/" target="_blank" rel="noopener">https://kz.kursiv.media/en/2026-11-02/engk-yeri-where-an-hour-of-labor-costs-the-most-in-kazakhstan/</a> <span class="tag est">reports Bureau of National Statistics survey</span></li>
+      <li id="ref-inform">Kozhabek, K. (2025, July 12). <i>Nomer 109: na chto zhaluyutsya astanchane</i> [Number 109: What Astana residents complain about]. Inform.kz. <a href="https://www.inform.kz/ru/nomer-109-na-chto-zhaluyutsya-astanchane-c988be" target="_blank" rel="noopener">https://www.inform.kz/ru/nomer-109-na-chto-zhaluyutsya-astanchane-c988be</a></li>
+      <li id="ref-mergel">Mergel, I., Edelmann, N., &amp; Haug, N. (2019). Defining digital transformation: Results from expert interviews. <i>Government Information Quarterly, 36</i>(4), Article 101385. <a href="https://doi.org/10.1016/j.giq.2019.06.002" target="_blank" rel="noopener">https://doi.org/10.1016/j.giq.2019.06.002</a></li>
+      <li id="ref-maidd">Ministry of Artificial Intelligence and Digital Development of the Republic of Kazakhstan. (2026, April 30). <i>Five years of eOtinish: How the digital platform transformed the dialogue between the state and citizens.</i> <a href="https://www.gov.kz/org/maidd/press/news/details/1212365?lang=en" target="_blank" rel="noopener">https://www.gov.kz/org/maidd/press/news/details/1212365?lang=en</a></li>
+      <li id="ref-minguide">Ministry of Artificial Intelligence and Digital Development of the Republic of Kazakhstan. (2026, October 14). <i>Kazakhstan has adopted guidelines on the use of artificial intelligence in government bodies.</i> <a href="https://www.gov.kz/org/maidd/documents/details/1082252?lang=en" target="_blank" rel="noopener">https://www.gov.kz/org/maidd/documents/details/1082252?lang=en</a></li>
+      <li id="ref-netcell">Net Cell. (2026). <i>Colocation services in Astana. Pricing and services.</i> <a href="https://netcell.kz/en/services/" target="_blank" rel="noopener">https://netcell.kz/en/services/</a></li>
+      <li id="ref-olivieri">Olivieri, E. (2026). <i>Bağcılar: Digital citizenship: AI-driven participatory governance for cities.</i> OIDP Participatory Platform. <a href="https://participate.oidp.net/processes/award2026/f/305/proposals/3732/versions/1" target="_blank" rel="noopener">https://participate.oidp.net/processes/award2026/f/305/proposals/3732/versions/1</a></li>
+      <li id="ref-rakh">Rakhimzhanov, D., Belginova, S., &amp; Yedilkhan, D. (2025). Automated classification of public transport complaints via text mining using LLMs and embeddings. <i>Information, 16</i>(8), Article 644. <a href="https://doi.org/10.3390/info16080644" target="_blank" rel="noopener">https://doi.org/10.3390/info16080644</a></li>
+      <li id="ref-ailaw">Republic of Kazakhstan. (2025). <i>On artificial intelligence</i> (Law No. 230-VIII of November 17, 2025). <a href="https://adilet.zan.kz/eng/docs/Z2500000230" target="_blank" rel="noopener">https://adilet.zan.kz/eng/docs/Z2500000230</a></li>
+      <li id="ref-pdl">Republic of Kazakhstan. (2013). <i>On personal data and their protection</i> (Law No. 94-V of May 21, 2013). <a href="https://adilet.zan.kz/eng/docs/Z1300000094" target="_blank" rel="noopener">https://adilet.zan.kz/eng/docs/Z1300000094</a></li>
+      <li id="ref-sam">Samarkhanov, A. (2026). Artificial intelligence as a tool for strengthening the service-oriented model of public administration in the Republic of Kazakhstan. <i>International Journal of Civil Service Reform and Practice, 14</i>(1), 56–67. <a href="https://doi.org/10.56289/ijcsrp.222" target="_blank" rel="noopener">https://doi.org/10.56289/ijcsrp.222</a></li>
+      <li id="ref-selten">Selten, F., Robeer, M., &amp; Grimmelikhuijsen, S. (2023). ‘Just like I thought’: Street-level bureaucrats trust AI recommendations if they confirm their professional judgment. <i>Public Administration Review, 83</i>(2), 263–278. <a href="https://doi.org/10.1111/puar.13602" target="_blank" rel="noopener">https://doi.org/10.1111/puar.13602</a></li>
+      <li id="ref-sun">Sun, T. Q., &amp; Medaglia, R. (2019). Mapping the challenges of artificial intelligence in the public sector: Evidence from public healthcare. <i>Government Information Quarterly, 36</i>(2), 368–383. <a href="https://doi.org/10.1016/j.giq.2018.09.008" target="_blank" rel="noopener">https://doi.org/10.1016/j.giq.2018.09.008</a></li>
+      <li id="ref-undp">United Nations Development Programme. (n.d.). <i>Kazakhstan. Digital Development Compass.</i> <a href="https://digitaldevelopmentcompass.undp.org/country/KAZ" target="_blank" rel="noopener">https://digitaldevelopmentcompass.undp.org/country/KAZ</a></li>
+      <li id="ref-wirtz">Wirtz, B. W., Weyerer, J. C., &amp; Geyer, C. (2019). Artificial intelligence and the public sector—Applications and challenges. <i>International Journal of Public Administration, 42</i>(7), 596–615. <a href="https://doi.org/10.1080/01900692.2018.1498103" target="_blank" rel="noopener">https://doi.org/10.1080/01900692.2018.1498103</a></li>
+      <li id="ref-wb22">World Bank. (2022). <i>2022 GovTech Maturity Index update.</i> <a href="https://www.worldbank.org/en/programs/govtech/2022-gtmi" target="_blank" rel="noopener">https://www.worldbank.org/en/programs/govtech/2022-gtmi</a></li>
+      <li id="ref-wb25">World Bank. (2025). <i>2025 GovTech Maturity Index update.</i> <a href="https://www.worldbank.org/en/programs/govtech/gtmi-2025-update" target="_blank" rel="noopener">https://www.worldbank.org/en/programs/govtech/gtmi-2025-update</a></li>
+      <li id="ref-wbg">World Bank Group. (n.d.). <i>Global Program on GovTech &amp; Public Sector Innovation.</i> <a href="https://www.worldbank.org/en/programs/govtech/ai-in-governance" target="_blank" rel="noopener">https://www.worldbank.org/en/programs/govtech/ai-in-governance</a></li>
+      <li id="ref-who">World Health Organization. (2026). <i>Kazakhstan: Country overview.</i> <a href="https://data.who.int/countries/398" target="_blank" rel="noopener">https://data.who.int/countries/398</a></li>
+      <li id="ref-zhide">Zhidebekkyzy, A., Sansyzbayeva, K., Ashirbekova, L., &amp; Imreh-Tóth, M. (2026). AI-driven public administration: Expert insights on adoption and implementation. <i>Economics and Sociology, 19</i>(1). <a href="https://doi.org/10.14254/2071-789X.2026/19-1/9" target="_blank" rel="noopener">https://doi.org/10.14254/2071-789X.2026/19-1/9</a></li>
+    </ol>
+    <p class="src rv">Additional context cited in the paper: World Bank GovTech Maturity Index (<a href="#ref-wb22">2022</a>, <a href="#ref-wb25">2025</a>), UNDP Digital Development Compass (<a href="#ref-undp">n.d.</a>), WHO (<a href="#ref-who">2026</a>), Mergel et al., Wirtz et al., Sun &amp; Medaglia (2019), Amirova (2025), Samarkhanov (2026), Zhidebekkyzy et al. (2026). Entries tagged “pending” are cited in the paper’s text but lack a full entry or link in its reference list.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>Qoldau AI — Classification and Routing of Citizen Requests</b> by Nazerke Amanbekova · PLS 519 · Dinara Pisareva · School of Sciences &amp; Humanities, Nazarbayev University</p>
+    <p>Website designed and built with the help of Claude (Anthropic), model Claude Sonnet 5.5 (<span class="mono">claude-sonnet-5-5</span>), under the author’s direction. Research, arguments and conclusions are the author’s.</p>
+  </div>
+</footer>
+<div class="tip" id="tip" role="tooltip"></div>
+<script src="js/main.js"></script>
+</body>
+</html>
